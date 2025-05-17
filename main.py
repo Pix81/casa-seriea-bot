@@ -84,11 +84,13 @@ def genera_articoli():
         link = notizia.link
 
         prompt = (
-            f"Scrivi un articolo giornalistico professionale e approfondito su Serie A "
-            f"basato sulla notizia: '{titolo}' ({link}). "
-            f"Includi contesto, classifica, tattica, dichiarazioni, numeri e scenari. "
-            f"Stile giornalistico, in italiano. Data: {oggi}. Lunghezza: 500–2000 parole."
-        )
+    f"Scrivi prima un titolo breve (massimo 75 caratteri) su una sola riga. "
+    f"Poi vai a capo due volte e scrivi l’articolo giornalistico completo in italiano "
+    f"su Serie A, basato su questa notizia: '{titolo}' ({link}). "
+    f"Includi contesto, classifica, tattica, dichiarazioni, numeri e scenari. "
+    f"Stile giornalistico. Data: {oggi}. Lunghezza tra 500 e 2000 parole."
+)
+
 
         tentativi = 0
         content = ""
