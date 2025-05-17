@@ -134,16 +134,17 @@ split_content = content.split("\n\n", 1)
 titolo_breve = split_content[0][:75]
 corpo_articolo = split_content[1] if len(split_content) > 1 else content
 
-post_data = {
-    "title": titolo_breve,
-    "content": corpo_articolo,
-    "status": "publish",
-    "tags": tags,
-    "categories": [cat_id] if cat_id else []
-}
-if featured_media_id:
-    post_data["featured_media"] = featured_media_id
+        post_data = {
+            "title": titolo_breve,
+            "content": corpo_articolo,
+            "status": "publish",
+            "tags": tags,
+            "categories": [cat_id] if cat_id else []
+        }
+
+        if featured_media_id:
             post_data["featured_media"] = featured_media_id
+
 
         r = requests.post(wp_url, auth=HTTPBasicAuth(WP_USER, WP_PASSWORD), json=post_data)
         if r.status_code == 201:
