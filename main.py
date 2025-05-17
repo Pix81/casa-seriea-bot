@@ -6,15 +6,17 @@ import requests
 from requests.auth import HTTPBasicAuth
 from io import BytesIO
 from PIL import Image
+import os
 from openai import OpenAI
 
-# 🔐 Credenziali da personalizzare
-OPENAI_API_KEY = "INSERISCI_LA_TUA_OPENAI_API_KEY"
-WP_USER = "INSERISCI_USER_WORDPRESS"
-WP_PASSWORD = "INSERISCI_PASSWORD_APP"
-WP_BASE = "https://www.casaseriea.it"
+# 🔐 Credenziali da variabili d'ambiente
+import os
+from openai import OpenAI
+WP_USER = os.getenv("WP_USER")
+WP_PASSWORD = os.getenv("WP_PASSWORD")
+WP_BASE = os.getenv("WP_BASE")
+client = OpenAI()
 
-client = OpenAI(api_key=OPENAI_API_KEY)
 
 wp_url = f"{WP_BASE}/wp-json/wp/v2/posts"
 wp_media_url = f"{WP_BASE}/wp-json/wp/v2/media"
