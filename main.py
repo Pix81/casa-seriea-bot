@@ -10,13 +10,10 @@ import os
 from openai import OpenAI
 
 # 🔐 Credenziali da variabili d'ambiente
-import os
-from openai import OpenAI
 WP_USER = os.getenv("WP_USER")
 WP_PASSWORD = os.getenv("WP_PASSWORD")
 WP_BASE = os.getenv("WP_BASE")
-client = OpenAI()
-
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 wp_url = f"{WP_BASE}/wp-json/wp/v2/posts"
 wp_media_url = f"{WP_BASE}/wp-json/wp/v2/media"
@@ -84,13 +81,12 @@ def genera_articoli():
         link = notizia.link
 
         prompt = (
-    f"Scrivi prima un titolo breve (massimo 75 caratteri) su una sola riga. "
-    f"Poi vai a capo due volte e scrivi l’articolo giornalistico completo in italiano "
-    f"su Serie A, basato su questa notizia: '{titolo}' ({link}). "
-    f"Includi contesto, classifica, tattica, dichiarazioni, numeri e scenari. "
-    f"Stile giornalistico. Data: {oggi}. Lunghezza tra 500 e 2000 parole."
-)
-
+            f"Scrivi prima un titolo breve (massimo 75 caratteri) su una sola riga. "
+            f"Poi vai a capo due volte e scrivi l’articolo giornalistico completo in italiano "
+            f"su Serie A, basato su questa notizia: '{titolo}' ({link}). "
+            f"Includi contesto, classifica, tattica, dichiarazioni, numeri e scenari. "
+            f"Stile giornalistico. Data: {oggi}. Lunghezza tra 500 e 2000 parole."
+        )
 
         tentativi = 0
         content = ""
@@ -124,27 +120,26 @@ def genera_articoli():
 
         cat_id = get_id("categories", "Serie A")
 
-image_url = genera_immagine_dalle(titolo)
-print("📸 Immagine:", image_url)
-if not image_url:
-    image_url = "https://www.casaseriea.it/wp-content/uploads/2024/01/serie-a-default.jpg"
+        image_url = genera_immagine_dalle(titolo)
+        print("📸 Immagine:", image_url)
+        if not image_url:
+            image_url = "https://www.casaseriea.it/wp-content/uploads/2024/01/serie-a-default.jpg"
 
-featured_media_id = upload_image(image_url)
-split_content = content.split("\n\n", 1)
-titolo_breve = split_content[0][:75]
-corpo_articolo = split_content[1] if len(split_content) > 1 else content
+        featured_media_id = upload_image(image_url)
+        split_content = content.split("\n\n", 1)
+        titolo_breve = split_content[0][:75]
+        corpo_articolo = split_content[1] if len(split_content) > 1 else content
 
-post_data = {
-    "title": titolo_breve,
-    "content": corpo_articolo,
-    "status": "publish",
-    "tags": tags,
-    "categories": [cat_id] if cat_id else []
-}
-if featured_media_id:
-    post_data["featured_media"] = featured_media_id
+        post_data = {
+            "title": titolo_breve,
+            "content": corpo_articolo,
+            "status": "publish",
+            "tags": tags,
+            "categories": [cat_id] if cat_id else []
+        }
 
-
+        if featured_media_id:
+            post_data["featured_media"] = featured_media_id
 
         r = requests.post(wp_url, auth=HTTPBasicAuth(WP_USER, WP_PASSWORD), json=post_data)
         if r.status_code == 201:
