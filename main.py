@@ -125,11 +125,11 @@ def genera_articoli():
         cat_id = get_id("categories", "Serie A")
 
         image_url = genera_immagine_dalle(titolo)
-        print("📸 Immagine:", image_url)
-        if not image_url:
-            image_url = "https://www.casaseriea.it/wp-content/uploads/2024/01/serie-a-default.jpg"
+print("📸 Immagine:", image_url)
+if not image_url:
+    image_url = "https://www.casaseriea.it/wp-content/uploads/2024/01/serie-a-default.jpg"
 
-        featured_media_id = upload_image(image_url)
+featured_media_id = upload_image(image_url)
 split_content = content.split("\n\n", 1)
 titolo_breve = split_content[0][:75]
 corpo_articolo = split_content[1] if len(split_content) > 1 else content
