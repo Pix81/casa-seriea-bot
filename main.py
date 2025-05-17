@@ -134,7 +134,7 @@ split_content = content.split("\n\n", 1)
 titolo_breve = split_content[0][:75]
 corpo_articolo = split_content[1] if len(split_content) > 1 else content
 
-        post_data = {
+       post_data = {
             "title": titolo_breve,
             "content": corpo_articolo,
             "status": "publish",
