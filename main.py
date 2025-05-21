@@ -13,7 +13,7 @@ from openai import OpenAI
 WP_USER = os.getenv("WP_USER")
 WP_PASSWORD = os.getenv("WP_PASSWORD")
 WP_BASE = os.getenv("WP_BASE")
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI()
 
 wp_url = f"{WP_BASE}/wp-json/wp/v2/posts"
 wp_media_url = f"{WP_BASE}/wp-json/wp/v2/media"
@@ -42,7 +42,7 @@ def upload_image(image_url):
             "Content-Type": "image/jpeg"
         }
         r = requests.post(wp_media_url, auth=HTTPBasicAuth(WP_USER, WP_PASSWORD), headers=headers, data=img_buffer)
-        print("📥 Upload status:", r.status_code)
+        print("📅 Upload status:", r.status_code)
         if r.status_code == 201:
             return r.json()["id"]
         else:
@@ -74,7 +74,7 @@ def genera_immagine_dalle(titolo):
 def genera_articoli():
     oggi = datetime.now().strftime("%d %B %Y")
     rss_url = "https://news.google.com/rss/search?q=calcio+serie+A&hl=it&gl=IT&ceid=IT:it"
-    notizie = feedparser.parse(rss_url).entries[:3]
+    notizie = feedparser.parse(rss_url).entries[:1]  # <-- 1 solo articolo per esecuzione
 
     for i, notizia in enumerate(notizie, 1):
         titolo = notizia.title
@@ -157,3 +157,4 @@ def webhook():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
+
